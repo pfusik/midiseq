@@ -1,0 +1,39 @@
+	opt	h-
+	ins	'seq.com'
+
+	opt	h+
+
+	org	$9484
+	dta	d'    Welcome to    '
+;	dta	d'                  '
+	dta	d'  MIDI SEQUENCER  '
+	dta	d'  --------------  '
+;	dta	d'                  '
+	dta	d'   version 1.15   '
+	dta	d' (c) 1993 M.Sygit '
+	dta	d' composing patch  '
+	dta	d' (c) 2017 P.Fusik '
+
+	org	$9c9f
+	jsr	playnote
+
+buf	equ	$8d24
+
+	org	$b871
+playnote
+	sta	$9cc0
+	sta	buf+4	; velocity
+	dey
+	lda	($82),y	; note
+	sta	buf+3
+	lda	($92),0+	; channel
+	eor	#$c0
+	sta	buf
+	eor	#$c0^$90
+	sta	buf+2
+	lda	($92),y	; program
+	sta	buf+1
+	mva	#5	$8f
+	mva	#$34	^32
+	jmp	$b806
+
