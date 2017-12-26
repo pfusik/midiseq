@@ -52,6 +52,6 @@ norelease
 	tax
 silence
 	stx	$8f
-	mva	#$34	^32
-	jmp	$b806
-
+	jsr	$ab1a	; motor on
+	jsr	$b806	; send buf
+	jmp	$ab28	; motor off
