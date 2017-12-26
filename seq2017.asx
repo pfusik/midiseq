@@ -21,19 +21,37 @@ buf	equ	$8d24
 
 	org	$b871
 playnote
-	sta	$9cc0
-	sta	buf+4	; velocity
+	sta	$9cc0	; velocity
+	ldx	#0
+	lda	$ab19	; previous note
+	bmi	norelease
+	sta	buf+1
+	stx	buf+2
+	lda	($92,x)
+	eor	#$80
+	sta	buf
+	sta	$ab19
+	ldx	#3
+norelease
+	lda	$9cc0
+	beq	silence
+	sta	buf+4,x	; velocity
 	dey
 	lda	($82),y	; note
-	sta	buf+3
+	sta	buf+3,x
+	sta	$ab19
 	lda	($92),0+	; channel
 	eor	#$c0
-	sta	buf
+	sta	buf,x
 	eor	#$c0^$90
-	sta	buf+2
+	sta	buf+2,x
 	lda	($92),y	; program
-	sta	buf+1
-	mva	#5	$8f
+	sta	buf+1,x
+	txa
+	add	#5
+	tax
+silence
+	stx	$8f
 	mva	#$34	^32
 	jmp	$b806
 
