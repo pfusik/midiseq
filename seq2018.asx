@@ -16,16 +16,18 @@
 	dta	d'   version 1.15   '
 	dta	d' (c) 1993 M.Sygit '
 	dta	d' composing&cmdline'
-	dta	d' (c) 2017 P.Fusik '
+	dta	d' (c) 2018 P.Fusik '
 
 	org	$9c9f
 	jsr	playnote
 
+	org	$a014
+	jsr	exitpattern
+
 buf	equ	$8d24
 
 	org	$b871
-playnote
-	sta	$9cc0	; velocity
+dorelease
 	ldx	#0
 	lda	$ab19	; previous note
 	bmi	norelease
@@ -37,8 +39,13 @@ playnote
 	sta	$ab19
 	ldx	#3
 norelease
+	rts
+
+playnote
+	sta	$9cc0	; velocity
+	jsr	dorelease
 	lda	$9cc0
-	beq	silence
+	beq	playit
 	sta	buf+4,x	; velocity
 	dey
 	lda	($82),y	; note
@@ -54,11 +61,16 @@ norelease
 	txa
 	add	#5
 	tax
-silence
+playit
 	stx	$8f
 	jsr	$ab1a	; motor on
 	jsr	$b806	; send buf
 	jmp	$ab28	; motor off
+
+exitpattern
+	jsr	dorelease
+	smi:jsr	playit
+	jmp	$b5cb
 
 filename	equ	$afd9
 IOCB_FILENAME	equ	0
