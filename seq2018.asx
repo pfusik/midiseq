@@ -3,7 +3,8 @@
 
 	opt	h+
 
-	org	$9456
+	org	$944e
+	mwa	#winstack+4	$90
 	jsr	cmdline
 	nop
 
@@ -218,3 +219,10 @@ arg_is_device_no
 arg_is_device_ret
 	rts
 	eif
+
+winstack
+; empty screen window to be restored after cmdline open
+	dta	a(0),0,0
+; new windows go here
+
+	end
