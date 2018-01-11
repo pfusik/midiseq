@@ -1,5 +1,9 @@
 	opt	h-
-	ins	'seq.com'
+	ins	'seq.com',0,$17
+	dta	{cmp a:}	; disable newline output while loading
+	ins	'seq.com',$18,$2d-$18
+	rts	; disable loading banner
+	ins	'seq.com',$2e
 
 	opt	h+
 
