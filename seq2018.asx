@@ -226,7 +226,7 @@ arg_is_device_ret
 
 winstack
 ; empty screen window to be restored after cmdline open
-	dta	a(0),0,0
+	dta	0,1,a(0)
 ; new windows go here
 
 	end
